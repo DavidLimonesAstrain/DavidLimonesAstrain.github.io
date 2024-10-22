@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Circular de Movimientos</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 900px;
+            height: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        h2 {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 20px;
+            width: 500px;
+            height: 40px;
+            border-radius: 5px;
+            border: 1px solid black;
+            text-align: center;
+        }
+
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #instructions {
+            position: absolute;
+            top: 140px;
+            right: 200px;
+            background-color: white;
+            padding: 10px;
+            border-radius: 7px;
+            border: 1px solid black;
+            
+        }
+
+        #movesList {
+            list-style-type: none;
+            padding-left: 10px;
+        }
+        #movesList li {
+            font-family: monospace;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #000000;
+            text-align: left;
+        }
+        #movesList li.move-right {
+            margin-left: 30px;
+        }
+
+        #movesList li.move-right2{
+            margin-left: 40px;
+        }
+
+        #movesList li.move-right3{
+            margin-left: 80px;
+        }
+
+        #buttonContainer {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        #levelButton{
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #003655;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #levelButton:hover{
+            background-color: #002244;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Nivel 1 Estructuras secuencias 1.1</h2> 
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div id="instructions">
+            <ol id="movesList">
+                <li class="move-left">up()</li>
+                <li>right()</li>
+                <li>right()</li>
+                <li>up()</li>
+                <li>right()</li>
+                <li>right()</li>
+            </ol>
+            <div id="error"></div>
+        </div>
+        <div id="buttonContainer">
+            <button id="levelButton">Cambiar de mapa</button>
+        </div>
+    </div>
+    <button id="endGameButton" style="display: none;">Terminar Juego</button>
+    <p id="endGameMessage" style="display: none;">¡Has terminado el juego!</p>
+    <script src="script.js"></script>
+
+    
+</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botón Cambiar de Mapa</title>
+    <style>
+        body {
+            font-family:serif;
+            font-size: 20px;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f7f7f7;
+        }
+
+        h2 {
+            color: #000000;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #004080; /* Color azul basado en los círculos */
+            color: white;
+            border: 2px solid #003366;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #002f66; /* Un azul más oscuro al pasar el ratón */
+        }
+
+        button:active {
+            background-color: #001f4d;
+            transform: translateY(2px); /* Efecto de clic */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <h2>Prototipo de Juego</h2>
+    <div class="container">
+        <button onclick="window.location.href='/MapaDeJuego.html'">Inicio del Juego</button>
+    </div>
+</body>
+</html>

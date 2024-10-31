@@ -394,7 +394,7 @@ function initializeLevel(level = LEVEL_ONE, subLevel = SUBLEVEL_ONE) {
                     <li>for i in range (2):</li>
                     <li class="move-right2">right()</li>
                     <li class="move-right2">up()</li>
-                    <li>left</li>
+                    <li>left()</li>
                     <li>if(yellow):</li>
                     <li class="move-right">up()</li>
 

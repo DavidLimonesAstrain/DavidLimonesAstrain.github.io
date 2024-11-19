@@ -400,9 +400,18 @@
 
     </div>
 
-    <script>
+     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            let folioCounter = 176;
+            const folioKey = 'folioCounter'; // Clave para almacenar el folio en localStorage
+            let folioCounter;
+
+            // Recuperar el folio desde localStorage o inicializarlo en 176
+            if (localStorage.getItem(folioKey)) {
+                folioCounter = parseInt(localStorage.getItem(folioKey), 10);
+            } else {
+                folioCounter = 282;
+                localStorage.setItem(folioKey, folioCounter);
+            }
 
             function clearForm() {
                 const inputs = document.querySelectorAll('input, textarea');
@@ -411,6 +420,14 @@
 
             function updateFolio() {
                 folioCounter++;
+                const folioString = folioCounter.toString().padStart(4, '0');
+                document.getElementById('loadId').textContent = `THR${folioString}`;
+                // Guardar el nuevo folio en localStorage
+                localStorage.setItem(folioKey, folioCounter);
+            }
+
+            function renderCurrentFolio() {
+                // Mostrar el folio actual en la página
                 const folioString = folioCounter.toString().padStart(4, '0');
                 document.getElementById('loadId').textContent = `THR${folioString}`;
             }
@@ -455,14 +472,18 @@
 
                     const timestamp = new Date().toISOString().replace(/[-:T.]/g, '_');
                     pdf.save(`documento_${timestamp}.pdf`);
-                    //updateFolio();
                 };
 
                 processDivs();
             });
+
+            // Mostrar la fecha actual
+            document.getElementById("date").innerText = new Date().toLocaleDateString("es-ES");
+            document.getElementById("date2").innerText = new Date().toLocaleDateString("es-ES");
+
+            // Mostrar el folio actual al cargar la página
+            renderCurrentFolio();
         });
-
-
         document.getElementById("date").innerText = new Date().toLocaleDateString("es-ES");
         document.getElementById("date2").innerText = new Date().toLocaleDateString("es-ES");
 

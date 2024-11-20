@@ -442,6 +442,17 @@
                 alert('Por favor, corrija la información y guarde los cambios.');
             });
 
+            document.getElementById('editFolioButton').addEventListener('click', function () {
+                const newFolio = prompt('Introduce el nuevo número de folio (solo números):');
+                if (newFolio && !isNaN(newFolio)) {
+                    localStorage.setItem('folioCounter', newFolio); // Guardar el nuevo valor
+                    alert(`El folio se ha cambiado a THR${parseInt(newFolio, 10).toString().padStart(4, '0')}`);
+                    location.reload(); // Recargar la página para reflejar el cambio
+                } else {
+                    alert('Por favor, introduce un número válido.');
+                }
+            });
+            
             document.getElementById('generate-pdf').addEventListener('click', function () {
                 const { jsPDF } = window.jspdf;
                 const documents = document.querySelectorAll('.document');
@@ -483,16 +494,13 @@
 
             // Mostrar el folio actual al cargar la página
             renderCurrentFolio();
-        });
-        document.getElementById("date").innerText = new Date().toLocaleDateString("es-ES");
-        document.getElementById("date2").innerText = new Date().toLocaleDateString("es-ES");
-
     </script>
 
     <div class="button-container">
         <button id="newDocumentButton" class="button">Nuevo Documento</button>
         <button id="correctButton" class="button">Corregir</button>
         <button id="generate-pdf" class="button">Descargar PDF</button>
+        <button id="editFolioButton" class="button">Editar Folio</button>
     </div>
     <br><br>
 

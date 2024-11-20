@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load and Rate Confirmation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #000000;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .document {
+            border: 1px solid #000;
+            padding: 30px 50px;
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            page-break-after: always;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .header-container img {
+            max-width: 260px;
+        }
+
+        .contact-info {
+            font-size: 12px;
+            display: grid;
+            grid-template-columns: 100px auto;
+            gap: 5px 10px;
+            align-items: center;
+        }
+
+        .company-info p {
+            margin: 0;
+        }
+
+        .contact-info .label {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .contact-info .value {
+            text-align: left;
+        }
+
+        .contact-info .office-date {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .section-title {
+            background-color: #ddd;
+            font-weight: bold;
+            padding: 5px;
+            text-align: center;
+            margin-top: 10px;
+            ;
+        }
+
+        .table-container {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+        }
+
+        .carrier-details-table td,
+        .pickup-delivery-table td,
+        .basics-table td {
+            padding: 4px 8px;
+            text-align: left;
+        }
+
+        .carrier-details-table input,
+        .pickup-delivery-table input,
+        .table-container input {
+            width: 120px;
+            height: 25px;
+            padding: 2px 4px;
+            font-size: 11px;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 18px;
+            margin: 20px 0;
+            text-transform: none;
+            border-top: 2px solid #ccc;
+            border-bottom: 2px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .instructions {
+            padding: 10px;
+            margin-right: 210px;
+        }
+
+        .instructions-list {
+            list-style-type: disc;
+            padding-left: 0.1px;
+            margin: 10px 0;
+        }
+
+        .signature-section {
+            margin-top: 200px;
+            font-size: 14px;
+        }
+
+        .signature-section p {
+            margin: 0;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .signature-line {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 100px;
+            bottom: 100px;
+
+        }
+
+        .highlight {
+            background-color: yellow;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        textarea {
+            width: 100%;
+            height: 50px;
+            padding: 5px;
+            font-size: 13px;
+            box-sizing: border-box;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        #pickupDelivery1 {
+            width: 250px;
+            height: 80px;
+            font-size: 13.8px;
+        }
+
+        #pickupText {
+            width: 250px;
+            height: 80px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="document">
+        <!-- Información de la empresa y contacto -->
+        <div class="header-container">
+            <div class="company-info">
+                <img src="logo.png" alt="THR Logo">
+            </div>
+            <div class="contact-info">
+                <span class="label">THR Rep</span><span class="value">Mario Ramirez</span>
+                <span class="label">Phone</span><span class="value">+52(656)379-7399</span>
+                <span class="label">Email</span><span class="value">alfredo.ramirez@thrtransportes.com.mx</span>
+                <span class="label">THR Office</span>
+                <span class="office-date">
+                    <span class="value">Cd. Juárez</span>
+                    <span style="margin-left: auto;"><span class="label">Date</span> <span id="date"></span></span>
+                </span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Encabezado -->
+        <h1>Load and Rate Confirmation</h1>
+
+        <!-- Carrier Details -->
+        <div class="section-title">Carrier Details</div>
+        <table class="carrier-details-table">
+            <tr>
+                <td style="font-weight: bold;">Carrier</td>
+                <td><input type="text" id="carier" placeholder="Ingrese el nombre del carrier"></td>
+                <td></td>
+                <td></td>
+                <td style="font-weight: bold;">Driver Name/Cell</td>
+                <td><textarea type="text" id="driver" placeholder="Nombre y teléfono del conductor"></textarea></td>
+            </tr>
+
+            <tr>
+                <td style="font-weight: bold;">MC Number</td>
+                <td><input type="text" id="mcNumber" placeholder="Nombre del MC Number"></td>
+                <td style="font-weight: bold;">Truck #</td>
+                <td><input type="text" id="truckNumber" placeholder="Número de camión"></td>
+                <td style="font-weight: bold;">Dispatcher/Phone</td>
+                <td><textarea type="text" id="dispatcherPhone" placeholder="Nombre y teléfono"></textarea></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">DOT #</td>
+                <td><input type="text" id="dotNumber" placeholder="Número DOT"></td>
+                <td style="font-weight: bold;">Trailer #</td>
+                <td><input type="text" id="trailerNumber" placeholder="Número de remolque"></td>
+                <td style="font-weight: bold;">Email</td>
+                <td><textarea type="text" id="email" placeholder="Correo electrónico"></textarea></td>
+            </tr>
+
+        </table>
+
+        <!-- Basics -->
+        <div class="section-title">Basics</div>
+        <table class="table-container basics-table">
+            <tr>
+                <td class="label" style="white-space: noweap;"><b>THR Load ID#</b></td>
+                <td id="loadId">THR0176</td>
+                <td class="label" colspan="4"><b>Shipment Notes</b></td>
+                <td>Presentar la oficina de pagos y cobranza la siguiente información en su debida factura,
+                    así como el
+                    número de caja y sello o candado de caja.</td>
+            </tr>
+        </table>
+
+        <!-- Pickup and Delivery Section -->
+        <div class="section-title">Pickup and Delivery</div>
+        <table class="table-container pickup-delivery-table">
+            <tr>
+                <td class="label"><b>Pickup Location</b></td>
+                <td></td>
+                <td><b>Date</b></td>
+                <td><input type="date" id="pickupDate"></td>
+            <tr>
+                <td><textarea id="pickupText"></textarea></td>
+                <td></td>
+                <td><b>Time</b></td>
+                <td><input type="time" id="pickupTime"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>Pickup #</b></td>
+                <td><input type="number" id="pickupPickup"></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="label"><b>Delivery Location</b></td>
+                <td></td>
+                <td><b>Date</b></td>
+                <td><input type="date" id="pickupDate2"></td>
+            </tr>
+            <tr>
+                <td><textarea name="" id="pickupDelivery1"></textarea></td>
+                <td></td>
+                <td><b>Time</b></td>
+                <td><input type="time" id="pickupTime2"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td><b>Delivery #</b></td>
+                <td><input type="number" id="pickupDelivery2"></td>
+            </tr>
+        </table>
+
+        <!-- Carrier Rate Agreement Section -->
+        <div class="section-title">Carrier Rate Agreement</div>
+        <table class="table-container">
+            <tr>
+                <td class="label" style="font-size: 18px; text-align: center;">Total <span class="highlight">$</span>
+                    <input type="number">
+                </td>
+            </tr>
+        </table>
+
+        <!-- Additional Instructions Section -->
+        <div class="section-title">Additional Instructions</div>
+        <div class="instructions">
+            <ul class="instructions-list">
+                Los conductores deben llamar o enviar un mensaje de texto a <b>TRANSPORTES HERMANOS RAMÍREZ</b> al
+                llegar y
+                salir de
+                cada punto de carga y deben llamar al llegar al destino.
+                <li>Cualquier carga dañada debe ser reportada de inmediato para su pago. Los cargos y descargas no
+                    reportados
+                    dentro de las 4 horas no serán pagados.</li>
+                <li><b>TRANSPORTES HERMANOS RAMÍREZ</b> debe ser notificado inmediatamente de cualquier exceso, faltante
+                    o producto
+                    dañado. La tasa de notificación resulta en una multa de $150.</li>
+                <li><b>TRANSPORTES HERMANOS RAMÍREZ</b> debe ser informado de cualquier problema durante el tránsito que
+                    pueda causar un
+                    retraso en la entrega o una recolección perdida. La falta de notificación resultará en una multa de
+                    hasta
+                    $2,000.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Segunda Hoja -->
+    <div class="document">
+        <!-- Información de la empresa y contacto (igual que la primera hoja) -->
+        <div class="header-container">
+            <div class="company-info">
+                <img src="logo.png" alt="THR Logo">
+            </div>
+            <div class="contact-info">
+                <span class="label">THR Rep</span><span class="value">Mario Ramirez</span>
+                <span class="label">Phone</span><span class="value">+52(656)379-7399</span>
+                <span class="label">Email</span><span class="value">alfredo.ramirez@thrtransportes.com.mx</span>
+                <span class="label">THR Office</span>
+                <span class="office-date">
+                    <span class="value">Cd. Juárez</span>
+                    <span style="margin-left: auto;"><span class="label">Date</span> <span id="date2"></span></span>
+                </span>
+                <!--<span class="value">Cd. Juárez <span><span class="label">Date</span> <span id="date"></span></span></span>-->
+
+                </span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <ul class="instructions-list">
+                <li>La descarga debe ser reportada dentro de 1 hora por telefono, correo electronico o mensaje de texto.
+                </li>
+                <li>Los comprobantes de entrega (POD) deben ser firmado y enviado por correo electrónico dentro de las
+                    12 horas; la falta de cumplimiento resultará en una multa de $150.</li>
+                <li>Al firmar a continuación, el transportia reconoce hacer leído y aceptado los Términos de Servicios
+                    de <b>TRANSPORTES HERMANOS RAMÍREZ</b>.</li>
+                <li>Para cualquier pregunta o inquietud sobre esya carga, por favor llame al represetante de
+                    <b>TRANSPORTES
+                        HERMANOS RAMÍREZ</b> mencionado en la parte superior de la página.
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="signature-section">
+            <p>
+                El <strong>TRANSPORTISTA</strong> debe firmar la confirmación de la carga y tarifa y devolverla a
+                <strong>TRANSPORTES HERMANOS RAMÍREZ</strong> al correo:
+                <span class="highlight">alfredo.ramirez@thrtransportes.com.mx</span>. ¡Gracias por hacer negocios con
+                <strong>TRANSPORTES HERMANOS RAMÍREZ</strong>!
+            </p>
+        </div>
+        <div class="signature-line">
+            <strong>Carrier Signature</strong>____________________________________
+            <strong>Date</strong>____________________________________
+            <br>
+        </div>
+        <br>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const folioKey = 'folioCounter'; // Clave para almacenar el folio en localStorage
+            let folioCounter;
+
+            // Recuperar el folio desde localStorage o inicializarlo en 176
+            if (localStorage.getItem(folioKey)) {
+                folioCounter = parseInt(localStorage.getItem(folioKey), 10);
+            } else {
+                folioCounter = 280;
+                localStorage.setItem(folioKey, folioCounter);
+            }
+
+            function clearForm() {
+                const inputs = document.querySelectorAll('input, textarea');
+                inputs.forEach(input => input.value = '');
+            }
+
+            function updateFolio() {
+                folioCounter++;
+                const folioString = folioCounter.toString().padStart(4, '0');
+                document.getElementById('loadId').textContent = `THR${folioString}`;
+                // Guardar el nuevo folio en localStorage
+                localStorage.setItem(folioKey, folioCounter);
+            }
+
+            function renderCurrentFolio() {
+                // Mostrar el folio actual en la página
+                const folioString = folioCounter.toString().padStart(4, '0');
+                document.getElementById('loadId').textContent = `THR${folioString}`;
+            }
+
+            document.getElementById('newDocumentButton').addEventListener('click', function () {
+                clearForm();
+                updateFolio();
+                alert(`Nuevo documento creado con folio THR${folioCounter.toString().padStart(4, '0')}`);
+            });
+
+            document.getElementById('correctButton').addEventListener('click', function () {
+                alert('Por favor, corrija la información y guarde los cambios.');
+            });
+
+            document.getElementById('resetFolioButton').addEventListener('click', function () {
+                const newFolio = prompt('Introduce el nuevo número de folio (solo números):', folioCounter);
+                if (newFolio && !isNaN(newFolio)) {
+                    folioCounter = parseInt(newFolio, 10);
+                    localStorage.setItem(folioKey, folioCounter); // Guardar el nuevo valor en localStorage
+                    renderCurrentFolio(); // Actualizar el folio en la página
+                    alert(`El folio se ha restablecido a THR${folioCounter.toString().padStart(4, '0')}`);
+                } else {
+                    alert('El valor introducido no es válido. Intenta de nuevo.');
+                }
+            });
+
+            document.getElementById('generate-pdf').addEventListener('click', function () {
+                const { jsPDF } = window.jspdf;
+                const documents = document.querySelectorAll('.document');
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'letter',
+                    compress: true
+                });
+                let currentY = 20;
+
+                const processDivs = async () => {
+                    for (let doc of documents) {
+                        const canvas = await html2canvas(doc, { scale: 8 });
+                        const imgData = canvas.toDataURL('image/jpeg');
+                        const imgProps = pdf.getImageProperties(imgData);
+                        const pdfWidth = pdf.internal.pageSize.getWidth() - 50;
+                        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+                        if (currentY + pdfHeight > pdf.internal.pageSize.getHeight() - 20) {
+                            pdf.addPage();
+                            currentY = 20;
+                        }
+
+                        pdf.addImage(imgData, 'JPEG', 20, currentY, pdfWidth, pdfHeight);
+                        currentY += pdfHeight + 10;
+                    }
+
+                    const timestamp = new Date().toISOString().replace(/[-:T.]/g, '_');
+                    pdf.save(`documento_${timestamp}.pdf`);
+                };
+
+                processDivs();
+            });
+
+            // Mostrar la fecha actual
+            document.getElementById("date").innerText = new Date().toLocaleDateString("es-ES");
+            document.getElementById("date2").innerText = new Date().toLocaleDateString("es-ES");
+
+            // Mostrar el folio actual al cargar la página
+            renderCurrentFolio();
+        });
+    </script>
+
+
+    <div class="button-container">
+        <button id="newDocumentButton" class="button">Nuevo Documento</button>
+        <button id="correctButton" class="button">Corregir</button>
+        <button id="generate-pdf" class="button">Descargar PDF</button>
+        <button id="resetFolioButton" class="button">Restablecer Folio</button>
+
+    </div>
+    <br><br>
+
+</body>
+
+</html>
